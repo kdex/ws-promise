@@ -1,0 +1,17 @@
+{
+	"presets": [
+		["env", {
+			"targets": {
+				"node": "current"
+			}
+		}],
+		"stage-0"
+	],
+	"plugins": [
+		["module-resolver", {
+			"root": ["./src"]
+		}],
+		["transform-runtime"],
+		["transform-async-generator-functions"]
+	]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "ws-promise",
+  "version": "1.0.0",
+  "description": "A tiny, Promise-based WebSocket protocol allowing request-response usage in ECMAScript",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "gulp test",
+    "compile": "gulp",
+    "prepublish": "npm run test && npm run compile"
+  },
+  "keywords": [
+    "ws",
+    "websocket",
+    "promise",
+    "client",
+    "protocol",
+    "subprotocol",
+    "esnext",
+    "es2015",
+    "es2016",
+    "es2017",
+    "es6",
+    "modern"
+  ],
+  "author": "kdex",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "babel-eslint": "^7.2.1",
+    "babel-plugin-module-resolver": "^2.5.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-register": "^6.24.0",
+    "eslint-plugin-filenames": "^1.1.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-ava": "^0.16.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^3.0.1",
+    "uws": "^0.14.0"
+  },
+  "ava": {
+    "require": "babel-register",
+    "babel": "inherit"
+  },
+  "dependencies": {
+    "crystal-event-emitter": "^2.1.1",
+    "uuid": "^3.0.1",
+    "ws": "^2.2.2"
+  }
+}
