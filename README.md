@@ -9,7 +9,7 @@ class MyServer extends Server {
 			engineOptions: {
 				port: 8000
 			}
-		})
+		});
 	}
 	onAdd(message, ...args) {
 		/* Clients can sum up numbers on the server */
@@ -69,7 +69,7 @@ Please note that `uws` support is not quite ready yet. `uws` is missing some eve
 This project has been tested against the client and server engines from `ws` and `uws`. Please also refer to the **Caveats** section for now.
 ### Can servers also call client methods?
 Yes, they both communicate with the same RPC protocol.
-### Do I *have* use `extends`?
+### Do I *have* to use `extends`?
 No, you can also use regular events like so:
 ```js
 server.on("multiply", (message, ...args) => { /* … */ });
