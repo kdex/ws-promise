@@ -47,5 +47,17 @@
     "crystal-event-emitter": "^2.1.1",
     "uuid": "^3.0.1",
     "ws": "^2.2.2"
-  }
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kdex/ws-promise.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kdex/ws-promise/issues"
+  },
+  "homepage": "https://github.com/kdex/ws-promise#readme"
 }
