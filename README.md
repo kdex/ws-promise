@@ -64,11 +64,15 @@ If you don't provide any engine, the `node.js` version comes pre-bundled with th
 
 ## Caveats
 Please note that `uws` support is not quite ready yet. `uws` is missing some events that `ws-promise` needs, and as long as `uws` doesn't implement them, this project can't offer full support. For now, using `ws` is *strongly recommended*.
+
 ## FAQ
+
 ### Which engines can I use?
 This project has been tested against the client and server engines from `ws` and `uws`. Please also refer to the **Caveats** section for now.
+
 ### Can servers also call client methods?
 Yes, they both communicate with the same RPC protocol.
+
 ### Do I *have* to use `extends`?
 No, you can also use regular events like so:
 ```js
