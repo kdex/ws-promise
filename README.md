@@ -11,9 +11,10 @@ class MyServer extends Server {
 			}
 		});
 	}
-	onAdd(message, ...args) {
+	async onAdd(message, ...args) {
 		/* Clients can sum up numbers on the server */
-		message.reply(args.reduce((a, b) => a + b));
+		await message.reply(args.reduce((a, b) => a + b));
+		/* In this line, the client will have received the result */
 	}
 }
 /* Create a new server/client */
