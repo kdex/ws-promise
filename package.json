@@ -3,6 +3,9 @@
   "version": "1.0.3",
   "description": "A tiny, Promise-based WebSocket protocol allowing request-response usage in ECMAScript",
   "main": "dist/index.js",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "test": "gulp test",
     "compile": "gulp",
@@ -25,19 +28,19 @@
   "author": "kdex",
   "license": "GPL-3.0",
   "devDependencies": {
-    "ava": "^0.18.2",
-    "babel-eslint": "^7.2.1",
-    "babel-plugin-module-resolver": "^2.5.0",
+    "ava": "^0.19.1",
+    "babel-eslint": "^7.2.2",
+    "babel-plugin-module-resolver": "^2.7.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.2.2",
-    "babel-preset-stage-0": "^6.22.0",
-    "babel-register": "^6.24.0",
-    "eslint-plugin-filenames": "^1.1.0",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "eslint-plugin-filenames": "^1.2.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-ava": "^0.16.0",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^3.0.1",
-    "uws": "^0.14.0"
+    "uws": "^0.14.1"
   },
   "ava": {
     "require": "babel-register",
@@ -46,7 +49,7 @@
   "dependencies": {
     "crystal-event-emitter": "^2.1.1",
     "uuid": "^3.0.1",
-    "ws": "^2.2.2"
+    "ws": "^2.2.3"
   },
   "directories": {
     "example": "examples",
