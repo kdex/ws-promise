@@ -36,7 +36,12 @@ export default class Client extends EventEmitter {
 			this.options = options;
 		}
 		if (!this.options.engine) {
-			throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
+			if (global.WebSocket) {
+				this.options.engine = global.WebSocket;
+			}
+			else {
+				throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
+			}
 		}
 		const defaultOptions = new Map([
 			["autoReconnect", true],
