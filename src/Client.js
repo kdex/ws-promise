@@ -97,23 +97,23 @@ export default class Client extends EventEmitter {
 			}
 			this.ws = new this.options.engine(this.url, this.protocols, this.options.engineOptions);
 			this.network = new Protocol(this.ws);
-			this.ws.on("open", e => {
+			this.ws.onopen = e => {
 				this.emit("open", e);
 				resolve(this.proxy);
-			});
-			this.ws.on("error", e => {
+			};
+			this.ws.onerror = e => {
 				this.emit("error", e);
 				reject(e);
 				// this.close();
-			})
+			};
 			/* Closed dirtily */
-			this.ws.on("close", e => {
+			this.ws.onclose = e => {
 				this.clear(e);
 				if (this.options.autoReconnect && !this.reconnecting) {
 					this.reconnect();
 				}
-			});
-			this.ws.on("message", string => this.network.read(string));
+			};
+			this.ws.onmessage = e => this.network.read(e.data);
 			this.network.on("*", (...args) => {
 				this.emit(...args);
 			});
