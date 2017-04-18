@@ -11,7 +11,7 @@
 		["module-resolver", {
 			"root": ["./src"]
 		}],
-		["transform-runtime"],
-		["transform-async-generator-functions"]
+		"transform-runtime",
+		"transform-async-generator-functions"
 	]
 }
