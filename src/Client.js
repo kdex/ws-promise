@@ -1,6 +1,7 @@
 import Protocol, { SYN } from "Protocol";
 import Message from "./Message";
 import EventEmitter from "crystal-event-emitter";
+import { inspect } from "util";
 const extensions = Symbol();
 export default class Client extends EventEmitter {
 	ws = null;
@@ -55,7 +56,7 @@ export default class Client extends EventEmitter {
 		}
 		this.proxy = new Proxy(this, {
 			get: (target, property) => {
-				if (property === "inspect") {
+				if (property === "inspect" || inspect && property === inspect.custom) {
 					return () => {
 						/* The proxy should at least be printable */
 						return target;
