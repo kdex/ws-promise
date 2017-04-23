@@ -60,7 +60,8 @@ export default class Server extends EventEmitter {
 						}
 					}
 				});
-				ws[network] = client; 
+				this.emit("connection", client);
+				ws[network] = client;
 				/* Take note of the client so that the server can reference it */
 				this.clients.add(client);
 				/* The endpoint should pass messages through the protocol */
