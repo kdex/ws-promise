@@ -31,7 +31,7 @@ export default class Client extends EventEmitter {
 		}
 		if (args.length === 3) {
 			/* User wants to specify options and protocols */
-			const [, protocols, options] = args;
+			const [, protocols, options = {}] = args;
 			this.protocols = protocols;
 			this.options = options;
 		}
@@ -96,7 +96,6 @@ export default class Client extends EventEmitter {
 				await this.close();
 			}
 			this.ws = new this.options.engine(this.url, this.protocols, this.options.engineOptions);
-			this.network = new Protocol(this.ws);
 			this.ws.onopen = e => {
 				this.emit("open", e);
 				resolve(this.proxy);
@@ -114,6 +113,7 @@ export default class Client extends EventEmitter {
 				}
 			};
 			this.ws.onmessage = e => this.network.read(e.data);
+			this.network = new Protocol(this.ws);
 			this.network.on("*", (...args) => {
 				this.emit(...args);
 			});
