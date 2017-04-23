@@ -8,10 +8,9 @@ export {
 }
 export default class Protocol extends EventEmitter {
 	internal = new EventEmitter();
-	constructor(ws, client) {
+	constructor(ws) {
 		super();
 		this.ws = ws;
-		this.client = client;
 	}
 	read(string) {
 		/* "Reading" means: Return the parsed message, but don't reply. This is the user's responsibility; instead, append a `reply` function so that the user can pass in arguments in response. */
