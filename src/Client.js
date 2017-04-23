@@ -6,6 +6,7 @@ export default class Client extends EventEmitter {
 	ws = null;
 	network = null;
 	reconnecting = false;
+	options = {};
 	constructor(...args) {
 		super({
 			inferListeners: true
@@ -25,7 +26,6 @@ export default class Client extends EventEmitter {
 			}
 			else {
 				/* He wants to specify protocols */
-				this.options = {};
 				this.protocols = arg2;
 			}
 		}
