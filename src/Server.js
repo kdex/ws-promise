@@ -2,6 +2,7 @@ import { Server as WebSocketServer } from "ws";
 import Protocol, { SYN } from "./Protocol";
 import Message from "./Message";
 import EventEmitter from "crystal-event-emitter";
+import { inspect } from "util";
 const network = Symbol("network");
 export default class Server extends EventEmitter {
 	clients = new Set();
@@ -32,7 +33,7 @@ export default class Server extends EventEmitter {
 			this.wss.on("connection", ws => {
 				const client = new Proxy(new Protocol(ws), {
 					get: (target, property) => {
-						if (property === "inspect") {
+						if (property === "inspect" || property === inspect.custom) {
 							return () => {
 								/* The proxy should at least be printable */
 								return target;
@@ -60,10 +61,10 @@ export default class Server extends EventEmitter {
 						}
 					}
 				});
-				this.emit("connection", client);
 				ws[network] = client;
 				/* Take note of the client so that the server can reference it */
 				this.clients.add(client);
+				this.emit("connection", client);
 				/* The endpoint should pass messages through the protocol */
 				ws.on("message", string => client.read(string));
 				ws.on("close", e => {
