@@ -28,19 +28,19 @@
   "author": "kdex",
   "license": "GPL-3.0",
   "devDependencies": {
-    "ava": "^0.18.2",
-    "babel-eslint": "^7.2.2",
-    "babel-plugin-module-resolver": "^2.7.0",
+    "ava": "^0.19.1",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.4.0",
+    "babel-preset-env": "^1.5.2",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
     "eslint-plugin-filenames": "^1.2.0",
     "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-ava": "^0.16.0",
+    "gulp-ava": "^0.17.1",
     "gulp-babel": "^6.1.2",
-    "gulp-eslint": "^3.0.1",
-    "uws": "^0.14.1"
+    "gulp-eslint": "^4.0.0",
+    "uws": "^8.14.0"
   },
   "ava": {
     "require": "babel-register",
@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "crystal-event-emitter": "^2.1.1",
-    "uuid": "^3.0.1",
-    "ws": "^2.2.3"
+    "uuid": "^3.1.0",
+    "ws": "^3.0.0"
   },
   "directories": {
     "example": "examples",

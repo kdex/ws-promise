@@ -23,6 +23,7 @@ test.beforeEach(async t => {
 		}
 	};
 	const uwsServerOptions = {
+		/* TODO: Replace this with `uwsServer` once they implement the necessary features */
 		engine: wsServer,
 		engineOptions: {
 			port: uwsPort
