@@ -151,7 +151,7 @@ export default class Client extends EventEmitter {
 	}
 	async send(message) {
 		if (!this.network) {
-			throw new Error(`Attempted to send instruction "${message.instruction}" without a connection being established`);
+			throw new Error(`Attempted to send command "${message.instruction.command}" without a connection being established`);
 		}
 		return this.network.send(message);
 	}
