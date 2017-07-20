@@ -71,7 +71,12 @@ export default class Client extends EventEmitter {
 						const remoteLookup = new Message(new SYN(property, ...args));
 						const [message, result] = await target.send(remoteLookup);
 						message.reply();
-						return result;
+						if (result.error && result.message) {
+							throw new Error(message);
+						}
+						else {
+							return result;
+						}
 					};
 				}
 				else {

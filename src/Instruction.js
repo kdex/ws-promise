@@ -7,6 +7,16 @@ class Instruction {
 		this.command = command;
 		this.args = args;
 		this.type = this.constructor.name;
+		/* Substitute Error instances */
+		for (let i = 0; i < args.length; ++i) {
+			const arg = args[i];
+			if (arg instanceof Error) {
+				args[i] = {
+					error: true,
+					message: arg.message
+				};
+			}
+		}
 	}
 }
 export class SYN extends Instruction {}
