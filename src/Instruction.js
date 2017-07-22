@@ -13,7 +13,8 @@ class Instruction {
 			if (arg instanceof Error) {
 				args[i] = {
 					error: true,
-					message: arg.message
+					message: arg.message,
+					stack: arg.stack
 				};
 			}
 		}

@@ -1,5 +1,6 @@
 import Protocol, { SYN } from "Protocol";
 import Message from "./Message";
+import RemoteError from "./RemoteError";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
 const extensions = Symbol();
@@ -71,8 +72,8 @@ export default class Client extends EventEmitter {
 						const remoteLookup = new Message(new SYN(property, ...args));
 						const [message, result] = await target.send(remoteLookup);
 						message.reply();
-						if (result.error && result.message) {
-							throw new Error(message);
+						if (result && result.error && result.message && result.stack) {
+							throw new RemoteError(result.message, result.stack);
 						}
 						else {
 							return result;
