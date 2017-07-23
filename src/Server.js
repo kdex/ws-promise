@@ -69,7 +69,7 @@ export default class Server extends EventEmitter {
 				ws.on("message", string => client.read(string));
 				ws.on("close", e => {
 					this.clients.delete(client);
-					this.emit("close", e);
+					this.emit("close", client, e);
 				});
 				/* The protocol emissions are forwarded */
 				client.on("*", (...args) => {
