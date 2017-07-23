@@ -3,6 +3,7 @@ import Message from "./Message";
 import RemoteError from "./RemoteError";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
+import proxify from "./proxify";
 const extensions = Symbol();
 export default class Client extends EventEmitter {
 	ws = null;
@@ -55,41 +56,7 @@ export default class Client extends EventEmitter {
 				this.options[option] = value;
 			}
 		}
-		this.proxy = new Proxy(this, {
-			get: (target, property) => {
-				if (property === "inspect" || inspect && property === inspect.custom) {
-					return () => {
-						/* The proxy should at least be printable */
-						return target;
-					};
-				}
-				if (property === "then") {
-					return this.proxy;
-				}
-				const lookUp = target[property];
-				if (!lookUp) {
-					return async (...args) => {
-						const remoteLookup = new Message(new SYN(property, ...args));
-						const [message, result] = await target.send(remoteLookup);
-						message.reply();
-						if (result && result.error && result.message && result.stack) {
-							throw new RemoteError(result.message, result.stack);
-						}
-						else {
-							return result;
-						}
-					};
-				}
-				else {
-					if (lookUp instanceof Function) {
-						return target::lookUp;
-					}
-					else {
-						return lookUp;
-					}
-				}
-			}
-		});
+		this.proxy = proxify(this, true);
 		return this.proxy;
 	}
 	clear(e) {

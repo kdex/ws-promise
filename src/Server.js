@@ -3,7 +3,8 @@ import Protocol, { SYN } from "./Protocol";
 import Message from "./Message";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
-const network = Symbol("network");
+import proxify from "./proxify";
+// const network = Symbol("network");
 export default class Server extends EventEmitter {
 	clients = new Set();
 	constructor(options = {}) {
@@ -31,37 +32,8 @@ export default class Server extends EventEmitter {
 		return new Promise(resolve => {
 			this.wss = new this.options.engine(this.options.engineOptions, () => resolve(this));
 			this.wss.on("connection", ws => {
-				const client = new Proxy(new Protocol(ws), {
-					get: (target, property) => {
-						if (property === "inspect" || property === inspect.custom) {
-							return () => {
-								/* The proxy should at least be printable */
-								return target;
-							};
-						}
-						if (property === "then") {
-							return this.proxy;
-						}
-						const lookUp = target[property];
-						if (!lookUp) {
-							return async (...args) => {
-								const remoteLookup = new Message(new SYN(property, ...args));
-								const [message, result] = await target.send(remoteLookup);
-								message.reply();
-								return result;
-							};
-						}
-						else {
-							if (lookUp instanceof Function) {
-								return target::lookUp;
-							}
-							else {
-								return lookUp;
-							}
-						}
-					}
-				});
-				ws[network] = client;
+				const client = proxify(new Protocol(ws));
+				// ws[network] = client;
 				/* Take note of the client so that the server can reference it */
 				this.clients.add(client);
 				this.emit("connection", client);
