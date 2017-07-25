@@ -4,6 +4,7 @@ import Message from "./Message";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
 import proxify from "./proxify";
+import { CLOSE_NORMAL } from "./codes";
 export default class Server extends EventEmitter {
 	clients = new Set();
 	constructor(options = {}) {
@@ -32,6 +33,15 @@ export default class Server extends EventEmitter {
 			this.wss = new this.options.engine(this.options.engineOptions, () => resolve(this));
 			this.wss.on("connection", ws => {
 				const client = proxify(new Protocol(ws));
+				/* Actual clients can handle `close` themselves (due to auto-reconnection). `Protocol`s can't. */
+				client.close = (...args) => {
+					return new Promise(resolve => {
+						ws.on("close", () => {
+							resolve();
+						});
+						ws.close();
+					});
+				};
 				/* Take note of the client so that the server can reference it */
 				this.clients.add(client);
 				this.emit("connection", client);
@@ -39,11 +49,15 @@ export default class Server extends EventEmitter {
 				ws.on("message", string => client.read(string));
 				ws.on("close", e => {
 					this.clients.delete(client);
-					this.emit("close", client, e);
+					client.emit("close");
+					this.emit("clientClose", client, e);
 				});
 				/* The protocol emissions are forwarded */
-				client.on("*", (...args) => {
-					this.emit(...args);
+				client.on("*", (event, ...args) => {
+					/* Don't forward the `close` event; server-side clients will receive `clientClose` */
+					if (event !== "close") {
+						this.emit(...args);
+					}
 				});
 			});
 		});

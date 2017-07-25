@@ -4,6 +4,7 @@ import RemoteError from "./RemoteError";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
 import proxify from "./proxify";
+import { CLOSE_NORMAL } from "./codes";
 const extensions = Symbol();
 export default class Client extends EventEmitter {
 	ws = null;
@@ -81,9 +82,12 @@ export default class Client extends EventEmitter {
 			};
 			/* Closed dirtily */
 			this.ws.onclose = e => {
+				const { code } = e;
 				this.clear(e);
-				if (this.options.autoReconnect && !this.reconnecting) {
-					this.reconnect();
+				if (code !== CLOSE_NORMAL) {
+					if (this.options.autoReconnect && !this.reconnecting) {
+						this.reconnect();
+					}
 				}
 			};
 			this.ws.onmessage = e => this.network.read(e.data);
