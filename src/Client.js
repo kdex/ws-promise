@@ -1,6 +1,5 @@
 import Protocol, { SYN } from "Protocol";
 import Message from "./Message";
-import RemoteError from "./RemoteError";
 import EventEmitter from "crystal-event-emitter";
 import { inspect } from "util";
 import proxify from "./proxify";

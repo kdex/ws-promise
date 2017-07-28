@@ -1,4 +1,5 @@
 import Message from "./Message";
+import RemoteError from "./RemoteError";
 import { SYN } from "./Protocol";
 import { inspect } from "util";
 export default (around, bind) => {
