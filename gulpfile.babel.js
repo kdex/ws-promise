@@ -11,7 +11,7 @@ export function test() {
 export function js() {
 	return gulp.src("src/**/*.js")
 		.pipe(babel())
-		.pipe(gulp.dest("dist"));
+		.pipe(gulp.dest("."));
 }
 export function lint() {
 	return gulp.src(["**/*.js", "!node_modules/**", "!dist/**"])

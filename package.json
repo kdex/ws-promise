@@ -2,10 +2,7 @@
   "name": "ws-promise",
   "version": "1.4.4",
   "description": "A tiny, Promise-based WebSocket protocol allowing request-response usage in ECMAScript",
-  "main": "dist/index.js",
-  "files": [
-    "dist/*"
-  ],
+  "main": "./index.js",
   "scripts": {
     "test": "gulp test",
     "compile": "gulp",
@@ -48,6 +45,7 @@
   },
   "dependencies": {
     "crystal-event-emitter": "^2.1.1",
+    "material-ui": "^0.18.7",
     "uuid": "^3.1.0",
     "ws": "^3.1.0"
   },
