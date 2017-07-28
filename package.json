@@ -3,6 +3,9 @@
   "version": "1.4.5",
   "description": "A tiny, Promise-based WebSocket protocol allowing request-response usage in ECMAScript",
   "main": "./index.js",
+  "files": [
+    "*.js"
+  ],
   "scripts": {
     "test": "gulp test",
     "compile": "gulp",
