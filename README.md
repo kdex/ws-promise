@@ -2,6 +2,8 @@
 This project allows you to use WebSockets with Promises and RPC. In short, this makes you able to write code like this:
 ```js
 /* First, make a Server class with an `onAdd` method */
+import Client from "ws-promise/Client";
+import Server from "ws-promise/Server";
 class MyServer extends Server {
 	constructor() {
 		/* Start a WebSocket engine on a port */
@@ -34,12 +36,14 @@ Note that `client.add` will actually contact the `server` and call its `onAdd` m
 ### Client (browser)
 On a browser, there already is a native `WebSocket` client that you can use. Therefore, you can simply write:
 ```js
+import Client from "ws-promise/Client";
 const client = new Client(url);
 ```
 ### Client (node)
 As `WebSocket` is a web standard, it is not part of the `node.js` runtime. Therefore, if you would like to instantiate a client in a non-browser environment, you have to pass a standards-compliant `WebSocket` client class implementation for it to use. Good examples for such implementations would be `ws` or `uws`.
 ```js
 import ws from "ws";
+import Client from "ws-promise/Client";
 const client = new Client(url, subprotocols, {
 	engine: ws
 });
@@ -48,6 +52,7 @@ const client = new Client(url, subprotocols, {
 As servers, too, have no default `WebSocket` implementation, the same rules apply. You can pass in any server implementation that you like:
 
 ```js
+import Server from "ws-promise/Server";
 import { wsServer } from "uws";
 import { uwsServer } from "uws";
 const wsServer = new Server({
