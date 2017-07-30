@@ -1,5 +1,4 @@
-import MessagePack from "msgpack5";
-const { encode, decode } = MessagePack();
+import { encode, decode } from "msgpack-lite";
 const commonDefaults = {
 	serialize: encode,
 	parse: decode

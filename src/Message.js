@@ -31,7 +31,11 @@ export default class Message {
 		});
 	}
 	static from(serialized, options) {
-		const object = options.parse(serialized);
+		let preprocessed = serialized;
+		if (serialized instanceof ArrayBuffer) {
+			preprocessed = new Uint8Array(serialized);
+		}
+		const object = options.parse(preprocessed);
 		const { type, command, args } = object.instruction;
 		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.name === type);
 		const instruction = new constructor(command, ...args);

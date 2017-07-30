@@ -5,17 +5,16 @@ import wsClient, { Server as wsServer } from "ws";
 import uwsClient, { Server as uwsServer } from "uws";
 import Message from "Message";
 import { SYN, ACK, SYN_ACK } from "Protocol";
-import MessagePack from "msgpack5";
+import { encode, decode } from "msgpack-lite";
 let globalPort = 6000;
 const TIMEOUT = 500;
-const msgPack = MessagePack();
 const restrict = fn => new Promise(resolve => {
 	fn();
 	setTimeout(resolve, TIMEOUT);
 });
 const serial = {
-	serialize: msgPack.encode,
-	parse: msgPack.decode
+	serialize: encode,
+	parse: decode
 };
 test.beforeEach(async t => {
 	const port = globalPort += 2;

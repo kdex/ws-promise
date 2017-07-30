@@ -43,7 +43,8 @@ export default class Client extends EventEmitter {
 			engine: global.WebSocket,
 			autoReconnect: true,
 			reconnectionMinimum: 200,
-			reconnectionFactor: 1.15
+			reconnectionFactor: 1.15,
+			binaryType: "arraybuffer"
 		});
 		if (!this.options.engine) {
 			throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
@@ -64,6 +65,7 @@ export default class Client extends EventEmitter {
 				await this.close();
 			}
 			this.ws = new this.options.engine(this.url, this.protocols, this.options.engineOptions);
+			this.ws.binaryType = this.options.binaryType;
 			this.ws.onopen = e => {
 				this.emit("open", e);
 				resolve(this.proxy);

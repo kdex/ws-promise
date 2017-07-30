@@ -46,7 +46,7 @@ export default class Server extends EventEmitter {
 				this.clients.add(client);
 				this.emit("connection", client);
 				/* The endpoint should pass messages through the protocol */
-				ws.on("message", string => client.read(string));
+				ws.on("message", serialized => client.read(serialized));
 				ws.on("close", e => {
 					this.clients.delete(client);
 					client.emit("close");
