@@ -2,7 +2,7 @@ import { SYN, ACK, SYN_ACK } from "./Instruction";
 import uuid from "uuid/v4";
 /**
 * Messages are Instruction containers.
-* They're the essential payload that will be serialized later.
+* They're the essential payload that will be encoded later.
 */
 export default class Message {
 	constructor(instruction, options, id = uuid()) {
@@ -24,18 +24,18 @@ export default class Message {
 		}
 		return new Message(new newInstruction(instruction.command, ...args), options, id);
 	}
-	serialize() {
-		return this.options.serialize({
+	encode() {
+		return this.options.encode({
 			id: this.id,
 			instruction: this.instruction
 		});
 	}
-	static from(serialized, options) {
-		let preprocessed = serialized;
-		if (serialized instanceof ArrayBuffer) {
-			preprocessed = new Uint8Array(serialized);
+	static from(encoded, options) {
+		let preprocessed = encoded;
+		if (encoded instanceof ArrayBuffer) {
+			preprocessed = new Uint8Array(encoded);
 		}
-		const object = options.parse(preprocessed);
+		const object = options.decode(preprocessed);
 		const { type, command, args } = object.instruction;
 		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.name === type);
 		const instruction = new constructor(command, ...args);

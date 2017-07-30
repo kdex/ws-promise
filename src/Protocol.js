@@ -13,9 +13,9 @@ export default class Protocol extends EventEmitter {
 		this.ws = ws;
 		this.options = options;
 	}
-	read(serialized) {
-		/* "Reading" means: Return the parsed message, but don't reply. This is the user's responsibility; instead, append a `reply` function so that the user can pass in arguments in response. */
-		const message = Message.from(serialized, this.options);
+	read(encoded) {
+		/* "Reading" means: Return the decoded message, but don't reply. This is the user's responsibility; instead, append a `reply` function so that the user can pass in arguments in response. */
+		const message = Message.from(encoded, this.options);
 		/* Every event should have a reference to the client responsible for it */
 		message.client = this;
 		message.reply = (...args) => {
@@ -45,7 +45,7 @@ export default class Protocol extends EventEmitter {
 				resolve([reply, ...args]);
 				/* TODO: Handle rejection/listener removal based on timeout */
 			});
-			this.ws.send(message.serialize());
+			this.ws.send(message.encode());
 		});
 	}
 }

@@ -3,8 +3,8 @@ import RemoteError from "./RemoteError";
 import { SYN } from "./Protocol";
 import { inspect } from "util";
 export default (around, {
-	serialize,
-	parse,
+	encode,
+	decode,
 	bind = false
 } = {}) => {
 	return new Proxy(around, {
@@ -22,8 +22,8 @@ export default (around, {
 			if (!lookUp) {
 				return async (...args) => {
 					const remoteLookUp = new Message(new SYN(property, ...args), {
-						serialize,
-						parse
+						encode,
+						decode
 					});
 					const [message, result] = await target.send(remoteLookUp);
 					message.reply();

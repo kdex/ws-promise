@@ -13,8 +13,8 @@ const restrict = fn => new Promise(resolve => {
 	setTimeout(resolve, TIMEOUT);
 });
 const serial = {
-	serialize: encode,
-	parse: decode
+	encode,
+	decode
 };
 test.beforeEach(async t => {
 	const port = globalPort += 2;

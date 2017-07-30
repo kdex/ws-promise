@@ -12,8 +12,8 @@ const restrict = fn => new Promise(resolve => {
 	setTimeout(resolve, TIMEOUT);
 });
 const serial = {
-	serialize: JSON.stringify,
-	parse: JSON.parse
+	encode: JSON.stringify,
+	decode: JSON.parse
 };
 test.beforeEach(async t => {
 	const port = globalPort += 2;
