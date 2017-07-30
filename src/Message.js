@@ -35,8 +35,8 @@ export default class Message {
 	toString() {
 		return JSON.stringify(this);
 	}
-	static from(string) {
-		const object = JSON.parse(string);
+	static from(serialized) {
+		const object = JSON.parse(serialized);
 		const { type, command, args } = object.instruction;
 		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.name === type);
 		const instruction = new constructor(command, ...args);

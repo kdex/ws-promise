@@ -1,7 +1,8 @@
 import { Server as WebSocketServer } from "ws";
+import EventEmitter from "crystal-event-emitter";
 import Protocol, { SYN } from "./Protocol";
 import Message from "./Message";
-import EventEmitter from "crystal-event-emitter";
+import addDefaults from "./addDefaults";
 import { inspect } from "util";
 import proxify from "./proxify";
 import { CLOSE_NORMAL } from "./codes";
@@ -11,10 +12,9 @@ export default class Server extends EventEmitter {
 		super({
 			inferListeners: true
 		});
-		this.options = options;
-		if (!this.options.engine) {
-			this.options.engine = WebSocketServer;
-		}
+		this.options = addDefaults(options, {
+			engine: WebSocketServer
+		});
 	}
 	async broadcast(message) {
 		const replies = new Map();
