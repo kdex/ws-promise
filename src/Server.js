@@ -32,7 +32,7 @@ export default class Server extends EventEmitter {
 		return new Promise(resolve => {
 			this.wss = new this.options.engine(this.options.engineOptions, () => resolve(this));
 			this.wss.on("connection", ws => {
-				const client = proxify(new Protocol(ws));
+				const client = proxify(new Protocol(ws, this.options), Object.assign({}, this.options));
 				/* Actual clients can handle `close` themselves (due to auto-reconnection). `Protocol`s can't. */
 				client.close = (...args) => {
 					return new Promise(resolve => {

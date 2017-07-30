@@ -11,6 +11,10 @@ const restrict = fn => new Promise(resolve => {
 	fn();
 	setTimeout(resolve, TIMEOUT);
 });
+const json = {
+	serialize: JSON.stringify,
+	parse: JSON.parse
+};
 test.beforeEach(async t => {
 	const port = globalPort += 2;
 	const [wsPort, uwsPort] = [port, port + 1];
@@ -54,7 +58,7 @@ test("server receives message from client", t => restrict(() => {
 		const { clients, servers } = t.context.data;
 		const command = "multiply";
 		const providedArgs = [1, 2, 3];
-		const message = new Message(new SYN(command, ...providedArgs));
+		const message = new Message(new SYN(command, ...providedArgs), json);
 		t.plan(servers.length * 2 * 3);
 		for (const server of servers) {
 			server.addEventListener(command, (message, ...args) => {
@@ -77,7 +81,7 @@ test("client receives message from server", t => restrict(() => {
 	const command = "multiply";
 	const providedArgs = [1, 2, 3];
 	const solution = [6];
-	const message = new Message(new SYN(command, ...providedArgs));
+	const message = new Message(new SYN(command, ...providedArgs), json);
 	t.plan(clients.length * (4 + 3) + servers.length);
 	for (const client of clients) {
 		client.on("message", (receivedCommand, message, ...args) => {
@@ -113,7 +117,7 @@ test("client receives reply from server", t => restrict(() => {
 	const command = "multiply";
 	const providedArgs = [1, 2, 3];
 	const serverReply = [6, "hello"];
-	const message = new Message(new SYN(command, ...providedArgs));
+	const message = new Message(new SYN(command, ...providedArgs), json);
 	t.plan(clients.length);
 	for (const server of servers) {
 		server.on(command, (message, ...args) => {
@@ -133,7 +137,7 @@ test("server receives reply from client", t => restrict(() => {
 	const providedArgs = [1, 2, 3];
 	const serverReply = [6, "hello"];
 	const clientReply = ["thanks"];
-	const message = new Message(new SYN(command, ...providedArgs));
+	const message = new Message(new SYN(command, ...providedArgs), json);
 	t.plan(servers.length * 2 + clients.length)
 	for (const server of servers) {
 		server.on(command, async (message, ...args) => {
@@ -163,7 +167,7 @@ test("servers are closable, server will clean up", t => restrict(async () => {
 		t.is(server.clients.size, 0);
 	}
 	for (const client of clients) {
-		client.send(new Message(new SYN(command)));
+		client.send(new Message(new SYN(command), json));
 	}
 }));
 test("clients are closable, server will clean up", t => restrict(async () => {
@@ -195,7 +199,7 @@ test("closed servers will be reconnected to, once they're up again (via `reconne
 	}
 	for (const client of clients) {
 		client.on("reconnect", () => {
-			client.send(new Message(new SYN(command)));
+			client.send(new Message(new SYN(command), json));
 		});
 	}
 }));
@@ -214,7 +218,7 @@ test("closed servers will be reconnected to, once they're up again (via `open`)"
 	}
 	for (const client of clients) {
 		client.on("open", () => {
-			client.send(new Message(new SYN(command)));
+			client.send(new Message(new SYN(command), json));
 		});
 	}
 }));

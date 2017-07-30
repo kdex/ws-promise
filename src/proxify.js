@@ -2,7 +2,11 @@ import Message from "./Message";
 import RemoteError from "./RemoteError";
 import { SYN } from "./Protocol";
 import { inspect } from "util";
-export default (around, bind) => {
+export default (around, {
+	serialize,
+	parse,
+	bind = false
+} = {}) => {
 	return new Proxy(around, {
 		get: (target, property, receiver) => {
 			if (property === "inspect" || property === inspect.custom) {
@@ -17,7 +21,10 @@ export default (around, bind) => {
 			const lookUp = target[property];
 			if (!lookUp) {
 				return async (...args) => {
-					const remoteLookUp = new Message(new SYN(property, ...args));
+					const remoteLookUp = new Message(new SYN(property, ...args), {
+						serialize,
+						parse
+					});
 					const [message, result] = await target.send(remoteLookUp);
 					message.reply();
 					if (result && result.error && result.message && result.stack) {

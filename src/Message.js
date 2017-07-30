@@ -5,22 +5,14 @@ import uuid from "uuid/v4";
 * They're the essential payload that will be serialized later.
 */
 export default class Message {
-	constructor(...args) {
-		let id, instruction;
-		if (args.length === 1) {
-			id = uuid();
-			instruction = args[0];
-		}
-		else if (args.length === 2) {
-			id = args[0];
-			instruction= args[1];
-		}
-		this.id = id;
+	constructor(instruction, options, id = uuid()) {
 		this.instruction = instruction;
+		this.options = options;
+		this.id = id;
 	}
 	makeReply(...args) {
 		let newInstruction;
-		const { id, instruction } = this;
+		const { instruction, options, id } = this;
 		if (instruction instanceof SYN) {
 			newInstruction = ACK;
 		}
@@ -30,16 +22,19 @@ export default class Message {
 		else {
 			throw new Error("Invalid attempt to reply to a reply");
 		}
-		return new Message(id, new newInstruction(instruction.command, ...args));
+		return new Message(new newInstruction(instruction.command, ...args), options, id);
 	}
-	toString() {
-		return JSON.stringify(this);
+	serialize() {
+		return this.options.serialize({
+			id: this.id,
+			instruction: this.instruction
+		});
 	}
-	static from(serialized) {
-		const object = JSON.parse(serialized);
+	static from(serialized, options) {
+		const object = options.parse(serialized);
 		const { type, command, args } = object.instruction;
 		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.name === type);
 		const instruction = new constructor(command, ...args);
-		return new this(object.id, instruction);
+		return new this(instruction, options, object.id);
 	}
 }

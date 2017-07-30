@@ -1,6 +1,7 @@
 import Protocol, { SYN } from "Protocol";
-import Message from "./Message";
 import EventEmitter from "crystal-event-emitter";
+import addDefaults from "./addDefaults";
+import Message from "./Message";
 import { inspect } from "util";
 import proxify from "./proxify";
 import { CLOSE_NORMAL } from "./codes";
@@ -38,25 +39,18 @@ export default class Client extends EventEmitter {
 			this.protocols = protocols;
 			this.options = options;
 		}
+		this.options = addDefaults(this.options, {
+			engine: global.WebSocket,
+			autoReconnect: true,
+			reconnectionMinimum: 200,
+			reconnectionFactor: 1.15
+		});
 		if (!this.options.engine) {
-			if (global.WebSocket) {
-				this.options.engine = global.WebSocket;
-			}
-			else {
-				throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
-			}
+			throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
 		}
-		const defaultOptions = new Map([
-			["autoReconnect", true],
-			["reconnectionMinimum", 200],
-			["reconnectionFactor", 1.15]
-		]);
-		for (const [option, value] of defaultOptions) {
-			if (!this.options.hasOwnProperty(option)) {
-				this.options[option] = value;
-			}
-		}
-		this.proxy = proxify(this, true);
+		this.proxy = proxify(this, Object.assign({}, this.options, {
+			bind: true
+		}));
 		return this.proxy;
 	}
 	clear(e) {
@@ -90,7 +84,7 @@ export default class Client extends EventEmitter {
 				}
 			};
 			this.ws.onmessage = e => this.network.read(e.data);
-			this.network = new Protocol(this.ws);
+			this.network = new Protocol(this.ws, this.options);
 			this.network.on("*", (...args) => {
 				this.emit(...args);
 			});
