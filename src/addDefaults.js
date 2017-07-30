@@ -1,5 +1,7 @@
+import MessagePack from "msgpack5";
+const { encode, decode } = MessagePack();
 const commonDefaults = {
-	serialize: JSON.stringify,
-	parse: JSON.parse
+	serialize: encode,
+	parse: decode
 };
 export default (options, specifics) => Object.assign({}, commonDefaults, specifics, options);

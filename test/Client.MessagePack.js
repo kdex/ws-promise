@@ -5,15 +5,17 @@ import wsClient, { Server as wsServer } from "ws";
 import uwsClient, { Server as uwsServer } from "uws";
 import Message from "Message";
 import { SYN, ACK, SYN_ACK } from "Protocol";
-let globalPort = 5000;
+import MessagePack from "msgpack5";
+let globalPort = 6000;
 const TIMEOUT = 500;
+const msgPack = MessagePack();
 const restrict = fn => new Promise(resolve => {
 	fn();
 	setTimeout(resolve, TIMEOUT);
 });
-const json = {
-	serialize: JSON.stringify,
-	parse: JSON.parse
+const serial = {
+	serialize: msgPack.encode,
+	parse: msgPack.decode
 };
 test.beforeEach(async t => {
 	const port = globalPort += 2;
@@ -24,23 +26,27 @@ test.beforeEach(async t => {
 		engine: wsServer,
 		engineOptions: {
 			port: wsPort
-		}
+		},
+		...serial
 	};
 	const uwsServerOptions = {
 		/* TODO: Replace this with `uwsServer` once they implement the necessary features */
 		engine: wsServer,
 		engineOptions: {
 			port: uwsPort
-		}
+		},
+		...serial
 	};
 	const [wss, uwss, ws, uws] = await Promise.all([
 		new Server(wsServerOptions).open(),
 		new Server(uwsServerOptions).open(),
 		new Client(wsURL, null, {
-			engine: wsClient
+			engine: wsClient,
+			...serial
 		}).open(),
 		new Client(uwsURL, null, {
-			engine: uwsClient
+			engine: uwsClient,
+			...serial
 		}).open()
 	]);
 	t.context.data = {
@@ -58,7 +64,7 @@ test("server receives message from client", t => restrict(() => {
 		const { clients, servers } = t.context.data;
 		const command = "multiply";
 		const providedArgs = [1, 2, 3];
-		const message = new Message(new SYN(command, ...providedArgs), json);
+		const message = new Message(new SYN(command, ...providedArgs), serial);
 		t.plan(servers.length * 2 * 3);
 		for (const server of servers) {
 			server.addEventListener(command, (message, ...args) => {
@@ -81,7 +87,7 @@ test("client receives message from server", t => restrict(() => {
 	const command = "multiply";
 	const providedArgs = [1, 2, 3];
 	const solution = [6];
-	const message = new Message(new SYN(command, ...providedArgs), json);
+	const message = new Message(new SYN(command, ...providedArgs), serial);
 	t.plan(clients.length * (4 + 3) + servers.length);
 	for (const client of clients) {
 		client.on("message", (receivedCommand, message, ...args) => {
@@ -117,7 +123,7 @@ test("client receives reply from server", t => restrict(() => {
 	const command = "multiply";
 	const providedArgs = [1, 2, 3];
 	const serverReply = [6, "hello"];
-	const message = new Message(new SYN(command, ...providedArgs), json);
+	const message = new Message(new SYN(command, ...providedArgs), serial);
 	t.plan(clients.length);
 	for (const server of servers) {
 		server.on(command, (message, ...args) => {
@@ -137,7 +143,7 @@ test("server receives reply from client", t => restrict(() => {
 	const providedArgs = [1, 2, 3];
 	const serverReply = [6, "hello"];
 	const clientReply = ["thanks"];
-	const message = new Message(new SYN(command, ...providedArgs), json);
+	const message = new Message(new SYN(command, ...providedArgs), serial);
 	t.plan(servers.length * 2 + clients.length)
 	for (const server of servers) {
 		server.on(command, async (message, ...args) => {
@@ -167,7 +173,7 @@ test("servers are closable, server will clean up", t => restrict(async () => {
 		t.is(server.clients.size, 0);
 	}
 	for (const client of clients) {
-		client.send(new Message(new SYN(command), json));
+		client.send(new Message(new SYN(command), serial));
 	}
 }));
 test("clients are closable, server will clean up", t => restrict(async () => {
@@ -199,7 +205,7 @@ test("closed servers will be reconnected to, once they're up again (via `reconne
 	}
 	for (const client of clients) {
 		client.on("reconnect", () => {
-			client.send(new Message(new SYN(command), json));
+			client.send(new Message(new SYN(command), serial));
 		});
 	}
 }));
@@ -218,7 +224,7 @@ test("closed servers will be reconnected to, once they're up again (via `open`)"
 	}
 	for (const client of clients) {
 		client.on("open", () => {
-			client.send(new Message(new SYN(command), json));
+			client.send(new Message(new SYN(command), serial));
 		});
 	}
 }));
