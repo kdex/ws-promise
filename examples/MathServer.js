@@ -1,4 +1,5 @@
-import { Client, Server } from "../src/index";
+import Client from "../src/Client";
+import Server from "../src/Server";
 import wsClient from "ws";
 class MathServer extends Server {
 	constructor() {
