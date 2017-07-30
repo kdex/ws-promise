@@ -9,7 +9,7 @@
   "scripts": {
     "test": "gulp test",
     "compile": "gulp",
-    "prepublish": "npm run test && npm run compile"
+    "prepublishOnly": "npm run test && npm run compile"
   },
   "keywords": [
     "ws",
