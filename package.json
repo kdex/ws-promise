@@ -1,6 +1,6 @@
 {
   "name": "ws-promise",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A tiny, Promise-based WebSocket protocol allowing request-response usage in ECMAScript",
   "main": "./index.js",
   "files": [
