@@ -23,8 +23,7 @@ class MathClient extends Client {
 const server = new MathServer();
 const client = new MathClient();
 (async () => {
-	await server.open();
-	await client.open();
+	await Promise.all([server.open(), client.open()]);
 	const six = await client.add(1, 2, 3);
 	console.log(six); // 6
 })();

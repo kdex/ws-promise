@@ -24,8 +24,7 @@ const server = new MyServer();
 const client = new Client("ws://localhost:8000");
 (async () => {
 	/* Make them connect to each other */
-	await server.open();
-	await client.open();
+	await Promise.all([server.open(), client.open()]);
 	/* The client can now call server (!) methods */
 	const six = await client.add(1, 2, 3);
 	console.log(six);
