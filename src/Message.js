@@ -11,18 +11,18 @@ export default class Message {
 		this.id = id;
 	}
 	makeReply(...args) {
-		let newInstruction;
+		let nextInstruction;
 		const { instruction, options, id } = this;
 		if (instruction instanceof SYN) {
-			newInstruction = ACK;
+			nextInstruction = ACK;
 		}
 		else if (instruction instanceof ACK) {
-			newInstruction = SYN_ACK;
+			nextInstruction = SYN_ACK;
 		}
 		else {
 			throw new Error("Invalid attempt to reply to a reply");
 		}
-		return new Message(new newInstruction(instruction.command, ...args), options, id);
+		return new Message(new nextInstruction(instruction.command, ...args), options, id);
 	}
 	encode() {
 		return this.options.encode({
@@ -37,7 +37,7 @@ export default class Message {
 		}
 		const object = options.decode(preprocessed);
 		const { type, command, args } = object.instruction;
-		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.name === type);
+		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.type === type);
 		const instruction = new constructor(command, ...args);
 		return new this(instruction, options, object.id);
 	}

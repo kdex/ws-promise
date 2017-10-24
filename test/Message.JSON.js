@@ -7,7 +7,7 @@ const serial = {
 };
 test("can be encoded", t => {
 	const message = new Message(new SYN("multiply", [1, 2, 3]), serial, 1);
-	t.is(message.encode(), `{"id":1,"instruction":{"command":"multiply","args":[[1,2,3]],"type":"SYN"}}`);
+	t.is(message.encode(), `{"id":1,"instruction":{"command":"multiply","args":[[1,2,3]],"type":0}}`);
 });
 test("can be decoded", t => {
 	const encoded = `{
@@ -17,7 +17,7 @@ test("can be decoded", t => {
 			"args": [
 				[1, 2, 3]
 			],
-			"type": "SYN"
+			"type": 0
 		}
 	}`;
 	const message = Message.from(encoded, serial);

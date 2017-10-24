@@ -6,7 +6,7 @@ class Instruction {
 	constructor(command, ...args) {
 		this.command = command;
 		this.args = args;
-		this.type = this.constructor.name;
+		this.type = this.constructor.type;
 		/* Substitute Error instances */
 		for (let i = 0; i < args.length; ++i) {
 			const arg = args[i];
@@ -20,6 +20,12 @@ class Instruction {
 		}
 	}
 }
-export class SYN extends Instruction {}
-export class ACK extends Instruction {}
-export class SYN_ACK extends Instruction {}
+export class SYN extends Instruction {
+	static type = 0;
+}
+export class ACK extends Instruction {
+	static type = 1;
+}
+export class SYN_ACK extends Instruction {
+	static type = 2;
+}
