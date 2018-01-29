@@ -5,7 +5,7 @@ export {
 	SYN,
 	ACK,
 	SYN_ACK
-}
+};
 export default class Protocol extends EventEmitter {
 	internal = new EventEmitter();
 	constructor(ws, options) {
@@ -37,11 +37,11 @@ export default class Protocol extends EventEmitter {
 		return message;
 	}
 	send(message) {
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			const { id } = message;
 			this.internal.once(id, reply => {
 				const { instruction } = reply;
-				const { command, args } = instruction;
+				const { args } = instruction;
 				resolve([reply, ...args]);
 				/* TODO: Handle rejection/listener removal based on timeout */
 			});

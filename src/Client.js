@@ -1,11 +1,8 @@
-import Protocol, { SYN } from "Protocol";
+import Protocol from "Protocol";
 import EventEmitter from "crystal-event-emitter";
 import addDefaults from "./addDefaults";
-import Message from "./Message";
-import { inspect } from "util";
 import proxify from "./proxify";
 import { CLOSE_NORMAL } from "./codes";
-const extensions = Symbol();
 export default class Client extends EventEmitter {
 	ws = null;
 	network = null;
