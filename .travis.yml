@@ -1,17 +1,24 @@
 language: node_js
 dist: trusty
 node_js:
- - "6"
- - "7"
- - "8"
- - "9"
+- "9"
+- "8"
+- "7"
+- "6"
+before_install:
+- "[[ $(node -v) =~ ^v9.*$ ]] || npm i -g npm@latest"
+- npm i -g greenkeeper-lockfile@1
+before_script:
+- greenkeeper-lockfile-update
 install:
- - npm i
+- npm i
 script:
- - npm run check-commit
- - npm run compile
+- npm run check-commit
+- npm run compile
 after_script:
- # Generate coverage report
- - npm run coverage
- # Update coverage report
- - $(npm bin)/nyc report --reporter=text-lcov > coverage.lcov && $(npm bin)/codecov
+# Generate coverage report
+- npm run coverage
+# Update coverage report
+- $(npm bin)/nyc report --reporter=text-lcov > coverage.lcov && $(npm bin)/codecov
+# Keep lock file up-to-date
+- greenkeeper-lockfile-upload
