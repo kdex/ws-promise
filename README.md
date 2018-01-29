@@ -1,4 +1,6 @@
 # ws-promise
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/kdex/ws-promise.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/kdex/ws-promise.svg?branch=master)](https://travis-ci.org/kdex/ws-promise)
 [![codecov](https://codecov.io/gh/kdex/ws-promise/branch/master/graph/badge.svg)](https://codecov.io/gh/kdex/ws-promise)
 
