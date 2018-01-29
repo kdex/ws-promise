@@ -1,4 +1,6 @@
 # ws-promise
+[![Build Status](https://travis-ci.org/kdex/ws-promise.svg?branch=master)](https://travis-ci.org/kdex/ws-promise)
+
 This project allows you to use WebSockets with Promises and RPC. In short, this makes you able to write code like this:
 ```js
 /* First, make a Server class with an `onAdd` method */

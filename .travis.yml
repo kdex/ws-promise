@@ -1,0 +1,17 @@
+language: node_js
+dist: trusty
+node_js:
+ - "4"
+ - "5"
+ - "6"
+ - "7"
+ - "8"
+ - "9"
+install:
+ - npm i
+script:
+ - npm run check-commit
+ - npm run compile
+after_script:
+ # Update coverage report
+ - $(npm bin)/nyc report --reporter=text-lcov > coverage.lcov && $(npm bin)/codecov
