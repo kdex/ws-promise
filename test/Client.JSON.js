@@ -2,7 +2,6 @@ import test from "ava";
 import Client from "Client";
 import Server from "Server";
 import wsClient, { Server as wsServer } from "ws";
-import uwsClient, { Server as uwsServer } from "uws";
 import Message from "Message";
 import { SYN, ACK, SYN_ACK } from "Protocol";
 let globalPort = 5000;
@@ -16,10 +15,9 @@ const serial = {
 	decode: JSON.parse
 };
 test.beforeEach(async t => {
-	const port = globalPort += 2;
-	const [wsPort, uwsPort] = [port, port + 1];
+	const port = globalPort++;
+	const wsPort = port;
 	const wsURL = `ws://localhost:${wsPort}`;
-	const uwsURL = `ws://localhost:${uwsPort}`;
 	const wsServerOptions = {
 		engine: wsServer,
 		engineOptions: {
@@ -27,29 +25,16 @@ test.beforeEach(async t => {
 		},
 		...serial
 	};
-	const uwsServerOptions = {
-		/* TODO: Replace this with `uwsServer` once they implement the necessary features */
-		engine: wsServer,
-		engineOptions: {
-			port: uwsPort
-		},
-		...serial
-	};
-	const [wss, uwss, ws, uws] = await Promise.all([
+	const [wss, ws] = await Promise.all([
 		new Server(wsServerOptions).open(),
-		new Server(uwsServerOptions).open(),
 		new Client(wsURL, null, {
 			engine: wsClient,
-			...serial
-		}).open(),
-		new Client(uwsURL, null, {
-			engine: uwsClient,
 			...serial
 		}).open()
 	]);
 	t.context.data = {
-		servers: [wss, uwss],
-		clients: [ws, uws]
+		servers: [wss],
+		clients: [ws]
 	};
 });
 test("client throws if there is no usable client implementation", t => {
@@ -59,26 +44,26 @@ test("server doesn't throw if there is no usable server implementation", t => {
 	t.notThrows(() => new Server());
 });
 test("server receives message from client", t => restrict(() => {
-		const { clients, servers } = t.context.data;
-		const command = "multiply";
-		const providedArgs = [1, 2, 3];
-		const message = new Message(new SYN(command, ...providedArgs), serial);
-		t.plan(servers.length * 2 * 3);
-		for (const server of servers) {
-			server.addEventListener(command, (message, ...args) => {
-				t.true(message instanceof Message);
-				t.true(message.instruction instanceof SYN);
-				t.deepEqual(args, providedArgs);
-			});
-			server.on(command, (message, ...args) => {
-				t.deepEqual(args, providedArgs);
-				t.true(message instanceof Message);
-				t.true(message.instruction instanceof SYN);
-			});
-		}
-		for (const client of clients) {
-			client.send(message);
-		}
+	const { clients, servers } = t.context.data;
+	const command = "multiply";
+	const providedArgs = [1, 2, 3];
+	const message = new Message(new SYN(command, ...providedArgs), serial);
+	t.plan(servers.length * 2 * 3);
+	for (const server of servers) {
+		server.addEventListener(command, (message, ...args) => {
+			t.true(message instanceof Message);
+			t.true(message.instruction instanceof SYN);
+			t.deepEqual(args, providedArgs);
+		});
+		server.on(command, (message, ...args) => {
+			t.deepEqual(args, providedArgs);
+			t.true(message instanceof Message);
+			t.true(message.instruction instanceof SYN);
+		});
+	}
+	for (const client of clients) {
+		client.send(message);
+	}
 }));
 test("client receives message from server", t => restrict(() => {
 	const { clients, servers } = t.context.data;
