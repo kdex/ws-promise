@@ -42,7 +42,6 @@
     "codecov": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-plugin-filenames": "^1.2.0",
-    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-ava": "^0.18.0",
     "gulp-babel": "^7.0.1",
     "nyc": "^11.4.1"
