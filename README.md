@@ -1,7 +1,7 @@
 # ws-promise
 
-[![Travis](https://img.shields.io/travis/kdex/ws-promise.svg?style=for-the-badge)](https://travis-ci.org/kdex/ws-promise)
-[![codecov](https://img.shields.io/codecov/c/github/kdex/ws-promise.svg?style=for-the-badge)](https://codecov.io/gh/kdex/ws-promise)
+[![Travis](https://img.shields.io/travis/kdex/ws-promise.svg?style=for-the-badge&colorB=green)](https://travis-ci.org/kdex/ws-promise)
+[![codecov](https://img.shields.io/codecov/c/github/kdex/ws-promise.svg?style=for-the-badge&colorB=green)](https://codecov.io/gh/kdex/ws-promise)
 [![dependencies Status](https://img.shields.io/david/kdex/ws-promise.svg?style=for-the-badge&colorB=green)](https://david-dm.org/kdex/ws-promise)
 
 This project allows you to use WebSockets with Promises and RPC. In short, this makes you able to write code like this:
