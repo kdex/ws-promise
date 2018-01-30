@@ -49,7 +49,10 @@
   },
   "ava": {
     "require": "babel-register",
-    "babel": "inherit"
+    "babel": "inherit",
+    "files": [
+      "test/**/*.test.js"
+    ]
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
