@@ -118,6 +118,27 @@ export default (basePort, serial) => {
 			})();
 		}
 	}));
+	test("client receives error from server", t => restrict(() => {
+		const { clients, servers } = t.context.data;
+		const command = "multiply";
+		const providedArgs = [1, 2, 3];
+		const errorMessage = "Could not multiply";
+		const serverReply = [new Error(errorMessage)];
+		const message = new Message(new SYN(command, ...providedArgs), serial);
+		t.plan(clients.length);
+		for (const server of servers) {
+			server.on(command, (message, ...args) => {
+				message.reply(...serverReply);
+			});
+		}
+		for (const client of clients) {
+			(async () => {
+				const [reply, ...result] = await client.send(message);
+				const [error] = result;
+				t.is(error.message, errorMessage);
+			})();
+		}
+	}));
 	test("server receives reply from client", t => restrict(() => {
 		const { clients, servers } = t.context.data;
 		const command = "multiply";
