@@ -5,11 +5,6 @@ node_js:
 - "8"
 - "7"
 - "6"
-before_install:
-- "[[ $(node -v) =~ ^v9.*$ ]] || npm i -g npm@latest"
-- npm i -g greenkeeper-lockfile@1
-before_script:
-- greenkeeper-lockfile-update
 install:
 - npm i
 script:
@@ -20,5 +15,3 @@ after_script:
 - npm run coverage
 # Update coverage report
 - $(npm bin)/nyc report --reporter=text-lcov > coverage.lcov && $(npm bin)/codecov
-# Keep lock file up-to-date
-- greenkeeper-lockfile-upload
