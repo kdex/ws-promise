@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/kdex/ws-promise/branch/master/graph/badge.svg)](https://codecov.io/gh/kdex/ws-promise)
 [![dependencies](https://david-dm.org/kdex/ws-promise/status.svg)](https://david-dm.org/kdex/ws-promise)
 
-This project allows you to use WebSockets with Promises and RPC. In short, this makes you able to write code like this:
+This project allows you to use WebSockets with Promises in RPC fashion. In brief, it enables you to write code like this:
 ```js
 /* First, make a Server class with an `onAdd` method */
 import Client from "ws-promise/Client";
