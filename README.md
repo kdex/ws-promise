@@ -35,7 +35,7 @@ const client = new Client("ws://localhost:8000");
 	console.log(six);
 })();
 ```
-Note that `client.add` will actually contact the `server` and call its `onAdd` method with the arguments `[1, 2, 3]` as `args`. The result of this call is a promise that we can `await` to retrieve the resulting number from the server. You don't have to register any methods manually anywhere; non-existing `client` methods will automatically be looked up on the server.
+Note that `client.add` will actually contact the `server` and call its `onAdd` method with the arguments `[1, 2, 3]` as `args`. The result of this call is a `Promise` that we can `await` to retrieve the resulting number from the server. You don't have to register any methods manually anywhere; non-existing `client` methods will automatically be looked up on the server.
 
 ## Getting started
 
