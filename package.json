@@ -57,7 +57,7 @@
     "crystal-event-emitter": "^2.1.4",
     "msgpack-lite": "^0.1.26",
     "uuid": "^3.2.1",
-    "ws": "^4.1.0"
+    "ws": "^5.0.0"
   },
   "directories": {
     "example": "examples",
