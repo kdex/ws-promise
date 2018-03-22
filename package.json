@@ -40,7 +40,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "codecov": "^3.0.0",
-    "eslint": "^4.19.0",
+    "eslint": "^4.19.1",
     "eslint-plugin-filenames": "^1.2.0",
     "greenkeeper-lockfile": "^1.14.0",
     "nyc": "^11.6.0"
