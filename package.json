@@ -43,7 +43,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-filenames": "^1.2.0",
     "greenkeeper-lockfile": "^1.14.0",
-    "nyc": "^11.6.0"
+    "nyc": "^11.7.1"
   },
   "ava": {
     "require": "babel-register",
