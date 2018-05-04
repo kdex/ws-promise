@@ -31,8 +31,9 @@ export default class Server extends EventEmitter {
 			this.wss.on("listening", () => {
 				resolve(this);
 			});
-			this.wss.on("connection", ws => {
+			this.wss.on("connection", (ws, request) => {
 				const client = proxify(new Protocol(ws, this.options), Object.assign({}, this.options));
+				client.request = request;
 				/* Actual clients can handle `close` themselves (due to auto-reconnection). `Protocol`s can't. */
 				client.close = () => new Promise(resolve => {
 					ws.on("close", () => {
