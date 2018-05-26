@@ -42,7 +42,7 @@
     "codecov": "^3.0.2",
     "eslint": "^4.19.1",
     "eslint-plugin-filenames": "^1.2.0",
-    "greenkeeper-lockfile": "^1.15.0",
+    "greenkeeper-lockfile": "^1.15.1",
     "nyc": "^11.8.0"
   },
   "ava": {
@@ -57,7 +57,7 @@
     "crystal-event-emitter": "^2.1.5",
     "msgpack-lite": "^0.1.26",
     "uuid": "^3.2.1",
-    "ws": "^5.1.1"
+    "ws": "^5.2.0"
   },
   "directories": {
     "example": "examples",
