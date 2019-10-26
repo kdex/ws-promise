@@ -1,4 +1,5 @@
-import { encode, decode } from "msgpack-lite";
+import MessagePack from "msgpack-lite";
+const { encode, decode } = MessagePack;
 const commonDefaults = {
 	encode,
 	decode

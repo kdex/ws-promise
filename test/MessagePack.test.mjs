@@ -1,5 +1,6 @@
 import communicate from "./communicate";
-import { encode, decode } from "msgpack-lite";
+import MessagePack from "msgpack-lite";
+const { encode, decode } = MessagePack;
 communicate(5000, {
 	encode,
 	decode

@@ -1,22 +1,22 @@
 import test from "ava";
-import { SYN } from "Protocol";
-import Message from "Message";
+import { SYN } from "../src/Protocol";
+import Message from "../src/Message";
 const serial = {
 	encode: JSON.stringify,
 	decode: JSON.parse
 };
 test("can be encoded", t => {
 	const message = new Message(new SYN("multiply", [1, 2, 3]), serial, 1);
-	t.is(message.encode(), `{"id":1,"instruction":{"command":"multiply","args":[[1,2,3]],"type":0}}`);
+	t.is(message.encode(), `{"id":1,"instruction":{"args":[[1,2,3]],"command":"multiply","type":0}}`);
 });
 test("can be decoded", t => {
 	const encoded = `{
 		"id": 1,
 		"instruction": {
-			"command": "multiply",
 			"args": [
 				[1, 2, 3]
 			],
+			"command": "multiply",
 			"type": 0
 		}
 	}`;

@@ -26,4 +26,5 @@ const client = new MathClient();
 	await Promise.all([server.open(), client.open()]);
 	const six = await client.add(1, 2, 3);
 	console.log(six); // 6
+	await Promise.all([server.close(), client.close()]);
 })();

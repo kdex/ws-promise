@@ -4,8 +4,8 @@
 */
 class Instruction {
 	constructor(command, ...args) {
-		this.command = command;
 		this.args = args;
+		this.command = command;
 		this.type = this.constructor.type;
 		/* Substitute Error instances */
 		for (let i = 0; i < args.length; ++i) {

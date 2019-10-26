@@ -4,14 +4,26 @@
 [![codecov](https://codecov.io/gh/kdex/ws-promise/branch/master/graph/badge.svg)](https://codecov.io/gh/kdex/ws-promise)
 [![dependencies](https://david-dm.org/kdex/ws-promise/status.svg)](https://david-dm.org/kdex/ws-promise)
 
-This project allows you to use WebSockets with Promises in RPC fashion. In brief, it enables you to write code like this:
+This project allows you to use WebSockets with Promises in RPC fashion.
+
+In brief, it enables you to write code like this on the client:
+**client.mjs**
 ```js
-/* First, make a Server class with an `onAdd` method */
 import Client from "ws-promise/Client";
+const client = new Client("ws://localhost:8000");
+(async () => {
+	await client.open();
+	/* The client can now call server (!) methods */
+	const six = await client.add(1, 2, 3);
+	console.log(six);
+})();
+```
+And code like this on the server:
+**server.mjs**
+```js
 import Server from "ws-promise/Server";
-class MyServer extends Server {
+class MathServer extends Server {
 	constructor() {
-		/* Start a WebSocket engine on a port */
 		super({
 			engineOptions: {
 				port: 8000
@@ -21,19 +33,11 @@ class MyServer extends Server {
 	async onAdd(message, ...args) {
 		/* Clients can sum up numbers on the server */
 		await message.reply(args.reduce((a, b) => a + b));
-		/* In this line, the client will have received the result */
+		/* In this line, the client will have received the result! */
 	}
 }
-/* Create a new server/client */
-const server = new MyServer();
-const client = new Client("ws://localhost:8000");
-(async () => {
-	/* Make them connect to each other */
-	await Promise.all([server.open(), client.open()]);
-	/* The client can now call server (!) methods */
-	const six = await client.add(1, 2, 3);
-	console.log(six);
-})();
+const server = new MathServer();
+server.open();
 ```
 Note that `client.add` will actually contact the `server` and call its `onAdd` method with the arguments `[1, 2, 3]` as `args`. The result of this call is a `Promise` that we can `await` to retrieve the resulting number from the server. You don't have to register any methods manually anywhere; non-existing `client` methods will automatically be looked up on the server.
 

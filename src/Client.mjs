@@ -1,9 +1,9 @@
-import Protocol from "Protocol";
+import Protocol from "./Protocol";
 import EventEmitter from "crystal-event-emitter";
 import addDefaults from "./addDefaults";
 import proxify from "./proxify";
 import { CLOSE_NORMAL } from "./codes";
-export default class Client extends EventEmitter {
+export default class Client extends EventEmitter.default {
 	ws = null;
 	network = null;
 	reconnecting = false;
@@ -37,11 +37,11 @@ export default class Client extends EventEmitter {
 			this.options = options;
 		}
 		this.options = addDefaults(this.options, {
-			engine: global.WebSocket,
 			autoReconnect: true,
-			reconnectionMinimum: 200,
+			binaryType: "arraybuffer",
+			engine: globalThis.WebSocket,
 			reconnectionFactor: 1.15,
-			binaryType: "arraybuffer"
+			reconnectionMinimum: 200
 		});
 		if (!this.options.engine) {
 			throw new Error("No WebSocket client implementation found. If your environment doesn't natively support WebSockets, please provide the client class to use with the `engine` option.");
@@ -57,36 +57,36 @@ export default class Client extends EventEmitter {
 		this.network = null;
 	}
 	open() {
-		return new Promise(async (resolve, reject) => {
-			if (this.ws) {
-				await this.close();
-			}
-			this.ws = new this.options.engine(this.url, this.protocols, this.options.engineOptions);
-			this.ws.binaryType = this.options.binaryType;
-			this.ws.onopen = e => {
-				this.emit("open", e);
-				resolve(this.proxy);
-			};
-			this.ws.onerror = e => {
-				this.emit("error", e);
-				reject(e);
-				// this.close();
-			};
-			/* Closed dirtily */
-			this.ws.onclose = e => {
-				const { code } = e;
-				this.clear(e);
-				if (code !== CLOSE_NORMAL) {
-					if (this.options.autoReconnect && !this.reconnecting) {
-						this.reconnect();
-					}
-				}
-			};
-			this.ws.onmessage = e => this.network.read(e.data);
-			this.network = new Protocol(this.ws, this.options);
-			this.network.on("*", (...args) => {
-				this.emit(...args);
-			});
+		return new Promise((resolve, reject) => {
+			this.close()
+				.then(() => {
+					this.ws = new this.options.engine(this.url, this.protocols, this.options.engineOptions);
+					this.ws.binaryType = this.options.binaryType;
+					this.ws.onopen = e => {
+						this.emit("open", e);
+						resolve(this.proxy);
+					};
+					this.ws.onerror = e => {
+						this.emit("error", e);
+						reject(e);
+					};
+					/* Closed dirtily */
+					this.ws.onclose = e => {
+						const { code } = e;
+						this.clear(e);
+						if (code !== CLOSE_NORMAL) {
+							if (this.options.autoReconnect && !this.reconnecting) {
+								this.reconnect();
+							}
+						}
+					};
+					this.ws.onmessage = e => this.network.read(e.data);
+					this.network = new Protocol(this.ws, this.options);
+					this.network.on("*", (...args) => {
+						this.emit(...args);
+					});
+				})
+				.catch(reject);
 		});
 	}
 	async reconnect(delay) {
@@ -104,7 +104,7 @@ export default class Client extends EventEmitter {
 		}
 	}
 	close() {
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			if (this.ws) {
 				/* Closed cleanly */
 				this.ws.onclose = e => {
@@ -114,7 +114,7 @@ export default class Client extends EventEmitter {
 				this.ws.close();
 			}
 			else {
-				reject(new Error("WebSocket hasn't been initialized"));
+				resolve(this.proxy);
 			}
 		});
 	}

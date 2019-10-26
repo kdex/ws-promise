@@ -1,10 +1,13 @@
-import { Server as WebSocketServer } from "ws";
+import WS from "ws";
 import EventEmitter from "crystal-event-emitter";
 import Protocol from "./Protocol";
 import addDefaults from "./addDefaults";
 import proxify from "./proxify";
-export default class Server extends EventEmitter {
+const { Server: WebSocketServer } = WS;
+export default class Server extends EventEmitter.default {
 	clients = new Set();
+	options = null;
+	#wss = null;
 	constructor(options = {}) {
 		super({
 			inferListeners: true
@@ -23,22 +26,20 @@ export default class Server extends EventEmitter {
 	}
 	clear() {
 		this.clients.clear();
-		this.wss = null;
+		this.#wss = null;
 	}
 	open() {
 		return new Promise(resolve => {
-			this.wss = new this.options.engine(this.options.engineOptions);
-			this.wss.on("listening", () => {
+			this.#wss = new this.options.engine(this.options.engineOptions);
+			this.#wss.on("listening", () => {
 				resolve(this);
 			});
-			this.wss.on("connection", (ws, request) => {
+			this.#wss.on("connection", (ws, request) => {
 				const client = proxify(new Protocol(ws, this.options), Object.assign({}, this.options));
 				client.request = request;
 				/* Actual clients can handle `close` themselves (due to auto-reconnection). `Protocol`s can't. */
 				client.close = () => new Promise(resolve => {
-					ws.on("close", () => {
-						resolve();
-					});
+					ws.on("close", resolve);
 					ws.close();
 				});
 				/* Take note of the client so that the server can reference it */
@@ -63,7 +64,11 @@ export default class Server extends EventEmitter {
 	}
 	close() {
 		return new Promise((resolve, reject) => {
-			this.wss.close(error => {
+			if (!this.#wss) {
+				resolve(this);
+				return;
+			}
+			this.#wss.close(error => {
 				if (error) {
 					reject(error);
 				}

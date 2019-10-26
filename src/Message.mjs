@@ -6,9 +6,9 @@ import uuid from "uuid/v4";
 */
 export default class Message {
 	constructor(instruction, options, id = uuid()) {
+		this.id = id;
 		this.instruction = instruction;
 		this.options = options;
-		this.id = id;
 	}
 	makeReply(...args) {
 		let nextInstruction;
@@ -36,7 +36,7 @@ export default class Message {
 			preprocessed = new Uint8Array(encoded);
 		}
 		const object = options.decode(preprocessed);
-		const { type, command, args } = object.instruction;
+		const { args, command, type } = object.instruction;
 		const [constructor] = [SYN, ACK, SYN_ACK].filter(c => c.type === type);
 		const instruction = new constructor(command, ...args);
 		return new this(instruction, options, object.id);

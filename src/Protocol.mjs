@@ -1,9 +1,10 @@
 import Message from "./Message";
-import { SYN, ACK, SYN_ACK } from "./Instruction";
-import EventEmitter from "crystal-event-emitter";
+import { ACK, SYN, SYN_ACK } from "./Instruction";
+import EventEmitterWrapper from "crystal-event-emitter";
+const EventEmitter = EventEmitterWrapper.default;
 export {
-	SYN,
 	ACK,
+	SYN,
 	SYN_ACK
 };
 export default class Protocol extends EventEmitter {

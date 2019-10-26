@@ -1,10 +1,11 @@
 import test from "ava";
-import Client from "Client";
-import Server from "Server";
-import wsClient, { Server as wsServer } from "ws";
-import Message from "Message";
-import { SYN, ACK, SYN_ACK } from "Protocol";
+import Client from "../src/Client";
+import Server from "../src/Server";
+import WSClient from "ws";
+import Message from "../src/Message";
+import { SYN, ACK, SYN_ACK } from "../src/Protocol";
 let globalPort;
+const { Server: WSServer } = WSClient;
 const TIMEOUT = 500;
 const restrict = fn => new Promise(resolve => {
 	fn();
@@ -17,7 +18,7 @@ export default (basePort, serial) => {
 		const wsPort = port;
 		const wsURL = `ws://localhost:${wsPort}`;
 		const wsServerOptions = {
-			engine: wsServer,
+			engine: WSServer,
 			engineOptions: {
 				port: wsPort
 			},
@@ -26,7 +27,7 @@ export default (basePort, serial) => {
 		const [wss, ws] = await Promise.all([
 			new Server(wsServerOptions).open(),
 			new Client(wsURL, null, {
-				engine: wsClient,
+				engine: WSClient,
 				...serial
 			}).open()
 		]);
@@ -258,6 +259,16 @@ export default (basePort, serial) => {
 				const result = await client.multiply(1, 2, 3);
 				t.is(result, 6);
 			}
+		}
+	}));
+	test("closing a server twice is idempotent", t => restrict(async () => {
+		const { servers, clients } = t.context.data;
+		const command = "hello";
+		t.plan(servers.length);
+		for (const server of servers) {
+			await server.close();
+			await server.close();
+			t.pass();
 		}
 	}));
 };

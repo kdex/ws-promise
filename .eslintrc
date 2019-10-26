@@ -7,10 +7,13 @@
 	"extends": [
 		"eslint:recommended"
 	],
+	"globals": {
+		"globalThis": true
+	},
 	"parser": "babel-eslint",
 	"parserOptions": {
+		"ecmaVersion": 2020,
 		"ecmaFeatures": {
-			"experimentalObjectRestSpread": true,
 			"jsx": true
 		},
 		"sourceType": "module"
@@ -371,15 +374,6 @@
 			"error",
 			"as-needed"
 		],
-		"require-jsdoc": [
-			"warn", {
-				"require": {
-					"FunctionDeclaration": true,
-					"MethodDefinition": true,
-					"ClassDeclaration": true
-				}
-			}
-		],
 		"semi": [
 			"error",
 			"always"
@@ -408,25 +402,6 @@
 		],
 		"use-isnan": [
 			"error"
-		],
-		"valid-jsdoc": [
-			"error", {
-				"prefer": {
-					"return": "return"
-				},
-				"requireReturn": false,
-				"requireParamDescription": true,
-				"requireReturnDescription": false,
-				"requireReturnType": true,
-				"preferType": {
-					"String": "string",
-					"Number": "number",
-					"Object": "object",
-					"Symbol": "symbol",
-					"Function": "function",
-					"Boolean": "boolean"
-				}
-			}
 		],
 		"yield-star-spacing": [
 			"error",

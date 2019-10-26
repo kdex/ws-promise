@@ -36,7 +36,7 @@ export default (around, {
 		}
 		else {
 			if (bind && lookUp instanceof Function) {
-				return target::lookUp;
+				return lookUp.bind(target);
 			}
 			else {
 				return lookUp;
