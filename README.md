@@ -11,6 +11,7 @@ Behind the scenes, the WebSocket API is first wrapped in a `Promise` layer, and 
 In summary, it enables you to write code like this on the client…:
 
 **client.mjs**
+
 ```js
 import Client from "ws-promise/Client";
 const client = new Client("ws://localhost:8000");
@@ -22,7 +23,9 @@ const client = new Client("ws://localhost:8000");
 })();
 ```
 …and code like this on the server:
+
 **server.mjs**
+
 ```js
 import Server from "ws-promise/Server";
 class MathServer extends Server {
@@ -49,18 +52,21 @@ Hence, **the client can call server methods, and the server can also call client
 ## Getting started
 ### Installation
 Most likely, you won't be using `ws-promise` at build time, so you should install it as a run-time dependency:
+
 ```npm
 $ npm install --save ws-promise
 ```
 ## Setup
 ### Client (browser)
 On a browser, there already is a native `WebSocket` client that you can use. Therefore, you can simply write:
+
 ```js
 import Client from "ws-promise/Client";
 const client = new Client(url);
 ```
 ### Client (node)
 As `WebSocket` is a web standard, it is not part of the `node.js` runtime. Therefore, if you would like to instantiate a client in a non-browser environment, you have to pass a standards-compliant `WebSocket` client class implementation for it to use. A good example for such an implementation would be `ws`.
+
 ```js
 import ws from "ws";
 import Client from "ws-promise/Client";
@@ -72,6 +78,7 @@ const client = new Client(url, {
 Most non-browser environments have no built-in `WebSocket` implementation either, so the rules apply.
 
 Note that this project has been tested against the client and server engines from `ws`. In general, all engines with the corresponding events that `ws` provides should work just as well.
+
 ```js
 import Server from "ws-promise/Server";
 import { wsServer } from "ws";
@@ -86,6 +93,7 @@ If you don't provide any engine, the `node.js` version comes pre-bundled with th
 ## Usage
 ### Adding event listeners
 There's two ways to make the server respond to your remote procedure calls. One way is to embrace ES2015 classes and add methods whose name is determined by the name of the remote procedure call. For example, if your client is trying to call `client.saveImage()`, you should extend the `Server` class and give your class a `saveImage` method:
+
 ```js
 import Server from "ws-promise/Server";
 class ImageServer extends Server {
@@ -95,6 +103,7 @@ class ImageServer extends Server {
 }
 ```
 If you're not too fond of classes, that's fine, too. You can achieve the same by using a single instance of `Server` and then registering event listeners, similar to how you would do it in the DOM:
+
 ```js
 import Server from "ws-promise/Server";
 const server = new Server();
@@ -105,12 +114,13 @@ server.addEventListener("saveImage", (message, ...args) => {
 Note that `on` is a shorthand for `addEventListener`.
 ### Wildcard events
 When debugging your endpoint, it can often be useful to log *all* incoming events, regardless of their type. The wildcard event is named `message`, so the corresponding method to implement would be `onMessage`. The arguments start with an additional parameter to help you figure out the event name, i. e.:
+
 ```js
 server.on("message", (event, message, ...args) => {
 	/* Your code here. */
 });
 ```
-### API
+## API
 Before reading this API documentation, note that classes are documented in `PascalCase` and class instances in `camelCase`.
 
 ### class: `Client`
@@ -140,7 +150,8 @@ Constructs a new instance of [`Client`][Client], but in contrast to native [`Web
 #### client.close()
 > **Note:** This method is idempotent.
 
-Disonnects the client from the server.
+Disconnects the client from the server.
+
 - returns: <[Promise]<[Client]>>, which can only resolve.
 #### client.open()
 Connects to the server URL specified in the constructor by **`url`**.
@@ -148,9 +159,11 @@ Connects to the server URL specified in the constructor by **`url`**.
 #### client.*anyOtherMethod*(...args)
 > **Note: *`anyOtherMethod`* is just a placeholder, you can (and should) put any desired method name here.**
 
-When run, tries to execute the *`anyOtherMethod`* on the [`Server`][Server]. If the server chooses to handle this call, the [`Promise`][Promise] will resolve with the value that the server has replied with.
+When run, tries to execute *`anyOtherMethod`* on the [`Server`][Server]. If the server chooses to handle this call, the [`Promise`][Promise] will resolve with the value that the server has replied with.
+
 - `...args`: \<...any\> The arguments to pass to *`anyOtherMethod`* if the server chooses to execute it. Note that each value must be serializable via **`encode`**.
 - returns: <[Promise]\<any\>>
+
 ### class: `Server`
 #### constructor(url[, protocols], [options])
 Constructs a new instance of [`Server`][Server]. but in contrast to [`WS.WebSocket.Server`][WS.WebSocket.Server] clients, this deliberately avoids a connection to `url` until you call [`server.open`][Server.open] — it merely serves the construction of the class.
@@ -168,26 +181,30 @@ Constructs a new instance of [`Server`][Server]. but in contrast to [`WS.WebSock
 	- **`engineOptions`**: <[Object]>
 		The options passed to the underlying WebSocket server engine.
 - returns: <[Server]>
+
 #### server.close()
+Closes the server.
+
 - returns: <[Promise]<[Server]>> Resolves if the server has been closed successfully.
+
 #### server.open()
 Starts listening.
 - returns: <[Promise]<[Server]>> Resolves as soon as the server is listening.
 
-[WebSocket.binaryType]: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/binaryType
-[WS.binaryType]: https://github.com/websockets/ws/blob/master/doc/ws.md#websocketbinarytype
 [boolean]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type
+[Client]: https://github.com/kdex/ws-promise#class-client
+[Client.open]: https://github.com/kdex/ws-promise#clientopen
+[Client.anyOtherMethod]: https://github.com/kdex/ws-promise#clientanyothermethodargs
 [function]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
 [number]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
-[string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [Object]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
-[Client]: https://example.invalid
-[Client.open]: https://example.invalid
-[Client.anyOtherMethod]: https://example.invalid
 [Promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[Server]: https://example.invalid
-[Server.open]: https://example.invalid
+[Server]: https://github.com/kdex/ws-promise#class-server
+[Server.open]: https://github.com/kdex/ws-promise#serveropen
+[string]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type
 [Uint8Array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array
 [WebSocket]: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/WebSocket
+[WebSocket.binaryType]: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/binaryType
+[WS.binaryType]: https://github.com/websockets/ws/blob/master/doc/ws.md#websocketbinarytype
 [WS.WebSocket]: https://github.com/websockets/ws/blob/master/doc/ws.md#class-websocket
 [WS.WebSocket.Server]: https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketserveroptions-callback
