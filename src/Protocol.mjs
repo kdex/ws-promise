@@ -1,7 +1,8 @@
-import Message from "./Message";
 import { ACK, SYN, SYN_ACK } from "./Instruction";
-import EventEmitterWrapper from "crystal-event-emitter";
-const EventEmitter = EventEmitterWrapper.default;
+import EventEmitterModule from "crystal-event-emitter";
+import Message from "./Message";
+import resolve from "./esm";
+const EventEmitter = resolve(EventEmitterModule);
 export {
 	ACK,
 	SYN,

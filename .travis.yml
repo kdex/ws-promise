@@ -1,18 +1,18 @@
 language: node_js
 dist: trusty
 node_js:
+- "12"
+- "11"
 - "10"
 - "9"
 - "8"
-- "7"
-- "6"
 install:
 - npm i
 script:
 - npm run check-commit
-- npm run compile
+- npm run build
 after_script:
 # Generate coverage report
 - npm run coverage
 # Update coverage report
-- $(npm bin)/nyc report --reporter=text-lcov > coverage.lcov && $(npm bin)/codecov
+- $(npm bin)/codecov

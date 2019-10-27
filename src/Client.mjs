@@ -1,9 +1,11 @@
 import Protocol from "./Protocol";
-import EventEmitter from "crystal-event-emitter";
+import EventEmitterModule from "crystal-event-emitter";
 import addDefaults from "./addDefaults";
 import proxify from "./proxify";
+import resolve from "./esm";
 import { CLOSE_NORMAL } from "./codes";
-export default class Client extends EventEmitter.default {
+const EventEmitter = resolve(EventEmitterModule);
+export default class Client extends EventEmitter {
 	ws = null;
 	network = null;
 	reconnecting = false;
@@ -53,8 +55,8 @@ export default class Client extends EventEmitter.default {
 	}
 	clear(e) {
 		this.emit("close", e);
-		this.ws = null;
 		this.network = null;
+		this.ws = null;
 	}
 	open() {
 		return new Promise((resolve, reject) => {

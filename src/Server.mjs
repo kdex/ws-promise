@@ -1,10 +1,12 @@
 import WS from "ws";
-import EventEmitter from "crystal-event-emitter";
+import EventEmitterModule from "crystal-event-emitter";
 import Protocol from "./Protocol";
 import addDefaults from "./addDefaults";
 import proxify from "./proxify";
-const { Server: WebSocketServer } = WS;
-export default class Server extends EventEmitter.default {
+import resolve from "./esm";
+const EventEmitter = resolve(EventEmitterModule);
+const WebSocketServer = resolve(WS, "Server");
+export default class Server extends EventEmitter {
 	clients = new Set();
 	options = null;
 	#wss = null;
@@ -39,7 +41,9 @@ export default class Server extends EventEmitter.default {
 				client.request = request;
 				/* Actual clients can handle `close` themselves (due to auto-reconnection). `Protocol`s can't. */
 				client.close = () => new Promise(resolve => {
-					ws.on("close", resolve);
+					ws.on("close", () => {
+						resolve(this);
+					});
 					ws.close();
 				});
 				/* Take note of the client so that the server can reference it */
