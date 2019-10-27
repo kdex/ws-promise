@@ -37,7 +37,8 @@
 		"test": "test"
 	},
 	"files": [
-		"*.mjs"
+		"dist",
+		"src"
 	],
 	"homepage": "https://github.com/kdex/ws-promise#readme",
 	"jest": {
@@ -81,7 +82,7 @@
 		"coverage": "nyc --reporter=lcov --reporter=text-summary npm test",
 		"lint": "eslint src --ext mjs",
 		"test": "jest",
-		"prepublishOnly": "npm run check-commit && npm run compile"
+		"prepublishOnly": "npm run check-commit && npm run build"
 	},
-	"version": "1.5.8"
+	"version": "2.0.1"
 }

@@ -12,7 +12,4 @@ script:
 - npm run check-commit
 - npm run build
 after_script:
-# Generate coverage report
-- npm run coverage
-# Update coverage report
 - $(npm bin)/codecov
