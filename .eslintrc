@@ -7,9 +7,6 @@
 	"extends": [
 		"eslint:recommended"
 	],
-	"globals": {
-		"globalThis": true
-	},
 	"parser": "babel-eslint",
 	"parserOptions": {
 		"ecmaVersion": 2020,
