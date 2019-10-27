@@ -79,7 +79,6 @@
 		"build:cjs": "babel src -d dist/cjs",
 		"build:esm": "BABEL_ENV=esm babel src -d dist/esm --keep-file-extension",
 		"check-commit": "npm test && npm run lint",
-		"coverage": "nyc --reporter=lcov --reporter=text-summary npm test",
 		"lint": "eslint src --ext mjs",
 		"test": "jest",
 		"prepublishOnly": "npm run check-commit && npm run build"
