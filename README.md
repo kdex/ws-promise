@@ -75,21 +75,32 @@ const client = new Client(url, {
 });
 ```
 ### Server
-Most non-browser environments have no built-in `WebSocket` implementation either, so the rules apply.
+Most non-browser environments have no built-in `WebSocket` implementation either, so the same rules apply.
 
 Note that this project has been tested against the client and server engines from `ws`. In general, all engines with the corresponding events that `ws` provides should work just as well.
 
 ```js
 import Server from "ws-promise/Server";
-import { wsServer } from "ws";
-const wsServer = new Server({
-	engine: wsServer,
+import WSClient from "ws";
+const { Server: WSServer } = WSClient;
+const server = new Server({
+	engine: WSServer,
 	engineOptions: {
 		port: 8000
 	}
 });
 ```
-If you don't provide any engine, the `node.js` version comes pre-bundled with the engine `ws`.
+
+If you don't provide any engine, the `node.js` version comes pre-bundled with the engine `ws`; so this will also work:
+
+```js
+import Server from "ws-promise/Server";
+const server = new Server({
+	engineOptions: {
+		port: 8000
+	}
+});
+```
 ## Usage
 ### Adding event listeners
 There's two ways to make the server respond to your remote procedure calls. One way is to embrace ES2015 classes and add methods whose name is determined by the name of the remote procedure call. For example, if your client is trying to call `client.saveImage()`, you should extend the `Server` class and give your class a `saveImage` method:

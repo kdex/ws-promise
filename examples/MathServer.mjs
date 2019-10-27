@@ -1,9 +1,11 @@
 import Client from "../src/Client";
 import Server from "../src/Server";
-import wsClient from "ws";
+import WSClient from "ws";
+const { Server: WSServer } = WSClient;
 class MathServer extends Server {
 	constructor() {
 		super({
+			engine: WSServer,
 			engineOptions: {
 				port: 8000
 			}
@@ -16,7 +18,7 @@ class MathServer extends Server {
 class MathClient extends Client {
 	constructor() {
 		super("ws://localhost:8000", null, {
-			engine: wsClient
+			engine: WSClient
 		});
 	}
 }
