@@ -67,8 +67,8 @@
 		"subprotocol"
 	],
 	"license": "GPL-3.0",
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.mjs",
+	"main": "./index.js",
+	"module": "./index.mjs",
 	"name": "ws-promise",
 	"repository": {
 		"type": "git",
@@ -76,9 +76,10 @@
 	},
 	"scripts": {
 		"build": "run-p build:*",
-		"build:cjs": "babel src -d dist/cjs",
-		"build:esm": "BABEL_ENV=esm babel src -d dist/esm --keep-file-extension",
+		"build:cjs": "babel src -d .",
+		"build:esm": "BABEL_ENV=esm babel src -d . --keep-file-extension",
 		"check-commit": "npm test && npm run lint",
+		"clean": "for FILE in src/*.mjs; do NAME=\"$(basename \"$FILE\" | cut -d. -f 1)\"; rm -f \"$NAME.mjs\"; rm -f \"$NAME.js\"; done && rm -rf coverage dist",
 		"lint": "eslint src --ext mjs",
 		"test": "jest",
 		"prepublishOnly": "npm run check-commit && npm run build"

@@ -1,3 +1,5 @@
+/*.mjs
+/*.js
+!.babelrc.js
 coverage
-dist
 node_modules
