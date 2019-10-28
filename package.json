@@ -37,8 +37,9 @@
 		"test": "test"
 	},
 	"files": [
-		"dist",
-		"src"
+		"*.js",
+		"*.mjs",
+		"!.babelrc.js"
 	],
 	"homepage": "https://github.com/kdex/ws-promise#readme",
 	"jest": {
@@ -84,5 +85,5 @@
 		"test": "jest",
 		"prepublishOnly": "npm run check-commit && npm run build"
 	},
-	"version": "2.0.2"
+	"version": "2.0.3"
 }
