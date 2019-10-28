@@ -1,14 +1,14 @@
 import Message from "./Message";
 import RemoteError from "./RemoteError";
 import { SYN } from "./Protocol";
-import { inspect } from "util";
+import util from "util";
 export default (around, {
 	encode,
 	decode,
 	bind = false
 } = {}) => new Proxy(around, {
 	get: (target, property, receiver) => {
-		if (property === "inspect" || property === inspect.custom) {
+		if (property === "inspect" || property === util.inspect.custom) {
 			return () => {
 				/* The proxy should at least be printable */
 				return target;
