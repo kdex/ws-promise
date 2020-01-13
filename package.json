@@ -16,7 +16,7 @@
 		"@babel/core": "^7.8.0",
 		"@babel/plugin-proposal-class-properties": "^7.8.0",
 		"@babel/plugin-proposal-export-default-from": "^7.8.0",
-		"@babel/preset-env": "^7.6.3",
+		"@babel/preset-env": "^7.8.2",
 		"@babel/register": "^7.6.2",
 		"babel-eslint": "^10.0.3",
 		"babel-jest": "^24.9.0",
