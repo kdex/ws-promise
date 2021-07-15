@@ -1,2 +1,2 @@
-export Client from "./Client";
-export Server from "./Server";
+export Client from "./Client.mjs";
+export Server from "./Server.mjs";

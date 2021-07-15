@@ -1,10 +1,10 @@
-import addDefaults from "./addDefaults";
-import { CLOSE_NORMAL } from "./codes";
+import addDefaults from "./addDefaults.mjs";
+import { CLOSE_NORMAL } from "./codes.mjs";
 import EventEmitterModule from "crystal-event-emitter";
 import globalThis from "globalthis";
-import Protocol from "./Protocol";
-import proxify from "./proxify";
-import resolve from "./esm";
+import Protocol from "./Protocol.mjs";
+import proxify from "./proxify.mjs";
+import resolve from "./esm.mjs";
 const EventEmitter = resolve(EventEmitterModule);
 export default class Client extends EventEmitter {
 	ws = null;

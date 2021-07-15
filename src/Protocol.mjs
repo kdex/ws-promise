@@ -1,7 +1,7 @@
-import { ACK, SYN, SYN_ACK } from "./Instruction";
+import { ACK, SYN, SYN_ACK } from "./Instruction.mjs";
 import EventEmitterModule from "crystal-event-emitter";
-import Message from "./Message";
-import resolve from "./esm";
+import Message from "./Message.mjs";
+import resolve from "./esm.mjs";
 const EventEmitter = resolve(EventEmitterModule);
 export {
 	ACK,

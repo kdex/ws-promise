@@ -1,9 +1,9 @@
 import WS from "ws";
 import EventEmitterModule from "crystal-event-emitter";
-import Protocol from "./Protocol";
-import addDefaults from "./addDefaults";
-import proxify from "./proxify";
-import resolve from "./esm";
+import Protocol from "./Protocol.mjs";
+import addDefaults from "./addDefaults.mjs";
+import proxify from "./proxify.mjs";
+import resolve from "./esm.mjs";
 const EventEmitter = resolve(EventEmitterModule);
 const WebSocketServer = resolve(WS, "Server");
 export default class Server extends EventEmitter {

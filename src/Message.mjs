@@ -1,11 +1,11 @@
-import { SYN, ACK, SYN_ACK } from "./Instruction";
-import uuid from "uuid/v4";
+import { SYN, ACK, SYN_ACK } from "./Instruction.mjs";
+import { v4 } from "uuid";
 /**
 * Messages are Instruction containers.
 * They're the essential payload that will be encoded later.
 */
 export default class Message {
-	constructor(instruction, options, id = uuid()) {
+	constructor(instruction, options, id = v4()) {
 		this.id = id;
 		this.instruction = instruction;
 		this.options = options;

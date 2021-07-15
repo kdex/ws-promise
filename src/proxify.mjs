@@ -1,6 +1,6 @@
-import Message from "./Message";
-import RemoteError from "./RemoteError";
-import { SYN } from "./Protocol";
+import Message from "./Message.mjs";
+import RemoteError from "./RemoteError.mjs";
+import { SYN } from "./Protocol.mjs";
 import util from "util";
 export default (around, {
 	encode,
