@@ -82,7 +82,7 @@
 		"check-commit": "npm test && npm run lint",
 		"clean": "for FILE in src/*.mjs; do NAME=\"$(basename \"$FILE\" | cut -d. -f 1)\"; rm -f \"$NAME.mjs\"; rm -f \"$NAME.js\"; done && rm -rf coverage dist",
 		"lint": "eslint src --ext mjs",
-		"test": "jest --detectOpenHandles",
+		"test": "jest",
 		"prepublishOnly": "npm run check-commit && npm run build"
 	},
 	"version": "2.0.4"
