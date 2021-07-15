@@ -45,7 +45,7 @@ export default class Protocol extends EventEmitter {
 				const { instruction } = reply;
 				const { args } = instruction;
 				resolve([reply, ...args]);
-				/* TODO: Handle rejection/listener removal based on timeout */
+				/* NOTE: Still need to handle rejection/listener removal based on timeout */
 			});
 			this.ws.send(message.encode());
 		});

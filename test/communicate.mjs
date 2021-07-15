@@ -7,9 +7,9 @@ import Server from "../src/Server";
 import WSClient from "ws";
 const { Server: WSServer } = WSClient;
 const TIMEOUT = 500;
-const terminate = async servers => {
-	for (const server of servers) {
-		await server.close();
+const terminate = async instances => {
+	for (const instance of instances) {
+		await instance.close();
 	}
 };
 export default serial => {
@@ -74,6 +74,7 @@ export default serial => {
 				server.on(command, (...args) => handleCommand(...args));
 			}
 			await Promise.all(clients.map(client => client.send(message)));
+			await terminate(clients);
 			await terminate(servers);
 	}, TIMEOUT);
 	test("client receives message from server", async () => {
@@ -123,6 +124,7 @@ export default serial => {
 			}
 		});
 		await Promise.all(serverPromises);
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("client receives reply from server", async () => {
@@ -141,6 +143,7 @@ export default serial => {
 			const [reply, ...result] = await client.send(message);
 			expect(result).toEqual(serverReply);
 		}));
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("client receives error from server", async () => {
@@ -161,6 +164,7 @@ export default serial => {
 			const [error] = result;
 			expect(error.message).toBe(errorMessage);
 		}));
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("server receives reply from client", async () => {
@@ -192,6 +196,7 @@ export default serial => {
 			return new Promise(resolve => {
 				const timer = setInterval(async () => {
 					if (count === servers.length) {
+						await terminate(clients);
 						await terminate(servers);
 						clearInterval(timer);
 						resolve();
@@ -214,6 +219,7 @@ export default serial => {
 		for (const client of clients) {
 			client.send(new Message(new SYN(command), serial));
 		}
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("clients are closable, server will clean up", async () => {
@@ -227,6 +233,7 @@ export default serial => {
 		return Promise.all(servers.map(server => new Promise(resolve => {
 			const timer = setInterval(async () => {
 				if (server.clients.size === 0) {
+					await terminate(clients);
 					await terminate(servers);
 					clearInterval(timer);
 					resolve();
@@ -255,6 +262,7 @@ export default serial => {
 		return new Promise(resolve => {
 			const timer = setInterval(async () => {
 				if (done) {
+					await terminate(clients);
 					await terminate(servers);
 					clearInterval(timer);
 					resolve();
@@ -283,6 +291,7 @@ export default serial => {
 		return new Promise(resolve => {
 			const timer = setInterval(async () => {
 				if (done) {
+					await terminate(clients);
 					await terminate(servers);
 					clearInterval(timer);
 					resolve();
@@ -303,6 +312,7 @@ export default serial => {
 			const result = await client[command](1, 2, 3);
 			expect(result).toBe(6);
 		}
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("servers can call a remote function, replies are automatic", async () => {
@@ -320,6 +330,7 @@ export default serial => {
 				expect(result).toBe(6);
 			}
 		}
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 	test("closing a server twice is idempotent", async () => {
@@ -330,6 +341,7 @@ export default serial => {
 			await expect(server.close()).resolves.toBe(server);
 			await expect(server.close()).resolves.toBe(server);
 		}
+		await terminate(clients);
 		await terminate(servers);
 	}, TIMEOUT);
 };
