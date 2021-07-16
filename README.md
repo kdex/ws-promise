@@ -1,6 +1,6 @@
 # ws-promise
 
-[![travis](https://travis-ci.org/kdex/ws-promise.svg?branch=master)](https://travis-ci.org/kdex/ws-promise)
+[![build](https://github.com/kdex/ws-promise/actions/workflows/master.yml/badge.svg)](https://github.com/kdex/ws-promise/actions/workflows/master.yml)
 [![codecov](https://codecov.io/gh/kdex/ws-promise/branch/master/graph/badge.svg)](https://codecov.io/gh/kdex/ws-promise)
 [![dependencies](https://david-dm.org/kdex/ws-promise/status.svg)](https://david-dm.org/kdex/ws-promise)
 
